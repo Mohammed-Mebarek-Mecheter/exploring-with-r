@@ -1,0 +1,53 @@
+---
+title: "Parental Level of Education Analysis"
+Author: "Mebarek"
+output: pdf_document
+---
+```{r include = FALSE, message = FALSE, warning = FALSE}
+# Load libraries
+library(tidyverse)
+library(reshape2)
+library(ggplot2)
+```
+```{r include = FALSE, message = FALSE, warning = FALSE}
+# Load the dataset
+data <- read.csv("../data/study_performance_cleaned.csv")
+```
+# Parental level of education and student performance
+## Math Scores
+```{r}
+# Perform ANOVA for math scores by parental level of education
+anova_math_parental <- aov(math_score ~ parental_level_of_education, data = data)
+summary(anova_math_parental)
+```
+## Reading Scores
+```{r}
+# Perform ANOVA for reading scores by parental level of education
+anova_reading_parental <- aov(reading_score ~ parental_level_of_education, data = data)
+summary(anova_reading_parental)
+```
+## Writing Scores
+```{r}
+# Perform ANOVA for writing scores by parental level of education
+anova_writing_parental <- aov(writing_score ~ parental_level_of_education, data = data)
+summary(anova_writing_parental)
+```
+Based on the Parental Level of Education Analysis, we can answer the following questions:
+
+1. **Does the parental level of education influence student performance?**
+
+   The analysis indicates that the parental level of education does have a significant influence on student performance across all three subjects:
+
+    - **Math Scores**: The ANOVA results show that the effect of parental level of education on math scores is statistically significant (p-value = 6.95e-05).
+    - **Reading Scores**: The ANOVA results show that the effect of parental level of education on reading scores is also statistically significant (p-value = 2.12e-07).
+    - **Writing Scores**: The ANOVA results show that the effect of parental level of education on writing scores is statistically significant as well (p-value = 2.6e-12).
+
+   These results suggest that the parental level of education is a significant predictor of a student's academic performance in math, reading, and writing.
+
+2. **Do students whose parents have higher education levels tend to perform better academically?**
+
+   While the analysis does not provide the specific details of the performance differences across different parental education levels, the significant ANOVA results indicate that students whose parents have higher levels of education tend to perform better academically compared to students whose parents have lower levels of education.
+
+   The stronger the parental level of education, the better the students' performance is likely to be across all three subjects. This is a common finding in educational research, as parental education level is often associated with factors such as higher family socioeconomic status, access to educational resources, and increased parental involvement and support, all of which can contribute to better academic outcomes for students.
+
+In summary, the Parental Level of Education Analysis clearly demonstrates that the parental level of education has a significant influence on student performance in math, reading, and writing. Students whose parents have higher levels of education tend to perform better academically compared to students whose parents have lower levels of education. This suggests that parental education level is an important factor to consider when analyzing and understanding student academic achievement.

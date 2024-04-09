@@ -1,0 +1,59 @@
+---
+title: "Gender Analysis"
+Author: "Mebarek"
+output: pdf_document
+---
+```{r include = FALSE, message = FALSE, warning = FALSE}
+# Load libraries
+library(tidyverse)
+library(reshape2)
+library(ggplot2)
+```
+```{r include = FALSE, message = FALSE, warning = FALSE}
+# Load the dataset
+data <- read.csv("../data/study_performance_cleaned.csv")
+```
+## Performance between male and female students
+### Math Scores:
+```{r}
+# Perform t-test for math scores between male and female students
+t_test_math_gender <- t.test(math_score ~ gender, data = data)
+print(t_test_math_gender)
+```
+### Reading Scores:
+```{r}
+# Perform t-test for reading scores between male and female students
+t_test_reading_gender <- t.test(reading_score ~ gender, data = data)
+print(t_test_reading_gender)
+```
+### Writing Scores:
+```{r}
+# Perform t-test for writing scores between male and female students
+t_test_writing_gender <- t.test(writing_score ~ gender, data = data)
+print(t_test_writing_gender)
+```
+Based on the gender analysis, we can answer the following questions:
+
+1. **Is there a significant difference in performance between male and female students?**
+
+   The analysis shows that there is a statistically significant difference in the performance of male and female students across different subjects:
+
+    - **Math Scores**: The t-test results show a significant difference in the mean math scores between male and female students (p-value = 2.379e-07). The mean math score for male students (69.11530) is higher than the mean math score for female students (64.42633).
+
+    - **Reading Scores**: The t-test results show a significant difference in the mean reading scores between male and female students (p-value < 2.2e-16). The mean reading score for female students (73.31827) is higher than the mean reading score for male students (65.88679).
+
+    - **Writing Scores**: The t-test results show a significant difference in the mean writing scores between male and female students (p-value < 2.2e-16). The mean writing score for female students (73.24361) is higher than the mean writing score for male students (63.74423).
+
+   These results indicate that there is a significant difference in the performance of male and female students, with male students performing better in math and female students performing better in reading and writing.
+
+2. **Do male students tend to perform better in certain subjects compared to female students, and vice versa?**
+
+   Based on the analysis, we can observe the following:
+
+    - **Math Scores**: Male students perform significantly better than female students in math.
+    - **Reading Scores**: Female students perform significantly better than male students in reading.
+    - **Writing Scores**: Female students perform significantly better than male students in writing.
+
+   These results suggest that male students tend to perform better in math, while female students tend to perform better in reading and writing.
+
+In summary, the gender analysis indicates that there are significant differences in the performance of male and female students across different subjects. Male students excel in math, while female students excel in reading and writing.

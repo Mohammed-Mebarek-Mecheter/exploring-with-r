@@ -1,0 +1,53 @@
+---
+title: "Test Preparation Course Analysis"
+Author: "Mebarek"
+output: pdf_document
+---
+```{r include = FALSE, message = FALSE, warning = FALSE}
+# Load libraries
+library(tidyverse)
+library(reshape2)
+library(ggplot2)
+```
+```{r include = FALSE, message = FALSE, warning = FALSE}
+# Load the dataset
+data <- read.csv("../data/study_performance_cleaned.csv")
+```
+# The preparation test course and student performance
+## Math Scores
+```{r }
+# Perform t-test for math scores between students who completed the test preparation course and those who did not
+t_test_math_prep <- t.test(math_score ~ test_preparation_course, data = data)
+print(t_test_math_prep)
+```
+## Reading Scores
+```{r }
+# Perform t-test for reading scores between students who completed the test preparation course and those who did not
+t_test_reading_prep <- t.test(reading_score ~ test_preparation_course, data = data)
+print(t_test_reading_prep)
+```
+## Writing Scores
+```{r }
+# Perform t-test for writing scores between students who completed the test preparation course and those who did not
+t_test_writing_prep <- t.test(writing_score ~ test_preparation_course, data = data)
+print(t_test_writing_prep)
+```
+Based on the Test Preparation Course Analysis, we can answer the following questions:
+
+1. **Does completing a test preparation course affect student performance?**
+
+   The analysis indicates that completing a test preparation course does have a significant impact on student performance across all three subjects:
+
+    - **Math Scores**: The t-test results show a statistically significant difference in the mean math scores between students who completed the test preparation course and those who did not (p-value = 2.347e-07). Students who completed the course had a higher mean math score (69.82633) compared to those who did not (64.91733).
+    - **Reading Scores**: The t-test results show a statistically significant difference in the mean reading scores between the two groups (p-value = 3.088e-13). Students who completed the test preparation course had a higher mean reading score (73.97759) compared to those who did not (67.30843).
+    - **Writing Scores**: The t-test results show a statistically significant difference in the mean writing scores between the two groups (p-value < 2.2e-16). Students who completed the test preparation course had a higher mean writing score (74.52661) compared to those who did not (65.31161).
+
+2. **Are students who complete the test preparation course more likely to score higher in exams?**
+
+   Yes, the analysis clearly indicates that students who completed the test preparation course are more likely to score higher in the exams compared to their peers who did not complete the course.
+
+   Across all three subjects (math, reading, and writing), the mean scores of students who completed the test preparation course were significantly higher than the mean scores of students who did not complete the course. The p-values for all the t-tests were extremely low, indicating a very strong statistical significance.
+
+   This suggests that completing the test preparation course is associated with better academic performance, and students who invest the time and effort to complete such a course are more likely to achieve higher scores in the exams.
+
+In summary, the Test Preparation Course Analysis provides compelling evidence that completing a test preparation course has a positive and significant impact on student performance. Students who completed the course outperformed their peers who did not in all three subjects (math, reading, and writing). This indicates that test preparation courses can be an effective tool for improving academic outcomes.

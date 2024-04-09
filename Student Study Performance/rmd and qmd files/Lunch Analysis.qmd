@@ -1,0 +1,54 @@
+---
+title: "Lunch Analysis"
+Author: "Mebarek"
+output: pdf_document
+---
+```{r include = FALSE, message = FALSE, warning = FALSE}
+# Load libraries
+library(tidyverse)
+library(reshape2)
+library(ggplot2)
+```
+```{r include = FALSE, message = FALSE, warning = FALSE}
+# Load the dataset
+data <- read.csv("../data/study_performance_cleaned.csv")
+```
+# Performance and Lunch
+## Math Scores
+```{r}
+# Perform t-test for math scores between students with standard lunch and free/reduced lunch
+t_test_math_lunch <- t.test(math_score ~ lunch, data = data)
+print(t_test_math_lunch)
+```
+## Reading Scores
+```{r}
+# Perform t-test for reading scores between students with standard lunch and free/reduced lunch
+t_test_reading_lunch <- t.test(reading_score ~ lunch, data = data)
+print(t_test_reading_lunch)
+```
+## Writing Scores
+```{r}
+# Perform t-test for writing scores between students with standard lunch and free/reduced lunch
+t_test_writing_lunch <- t.test(writing_score ~ lunch, data = data)
+print(t_test_writing_lunch)
+```
+Based on the Lunch Analysis, we can answer the following questions:
+
+1. **Is there a difference in performance between students who have standard lunch and those who have free/reduced lunch?**
+
+   The analysis indicates that there is a significant difference in the academic performance between students who have standard lunch and those who have free/reduced lunch:
+
+    - **Math Scores**: The t-test results show a statistically significant difference in the mean math scores between the two groups (p-value < 2.2e-16). Students with standard lunch have a higher mean math score (70.23988) compared to students with free/reduced lunch (60.07849).
+    - **Reading Scores**: The t-test results show a statistically significant difference in the mean reading scores between the two groups (p-value = 5.255e-11). Students with standard lunch have a higher mean reading score (71.84424) compared to students with free/reduced lunch (65.76453).
+    - **Writing Scores**: The t-test results show a statistically significant difference in the mean writing scores between the two groups (p-value = 1.134e-12). Students with standard lunch have a higher mean writing score (71.02336) compared to students with free/reduced lunch (64.21512).
+
+2. **Does the type of lunch have any impact on academic performance?**
+
+   The analysis clearly indicates that the type of lunch (standard or free/reduced) has a significant impact on the academic performance of students across all three subjects:
+
+    - The t-test results show that the differences in mean scores between the two lunch groups are statistically significant for math, reading, and writing.
+    - Students who have standard lunch consistently outperform their peers who have free/reduced lunch in all three subjects.
+
+These findings suggest that the type of lunch a student receives is an important factor that is associated with their academic performance. Students who have access to standard lunch, which is likely indicative of a higher socioeconomic status, tend to perform better academically compared to students who receive free or reduced-price lunch, which is often associated with a lower socioeconomic background.
+
+In summary, the Lunch Analysis demonstrates that there is a significant difference in the academic performance of students based on the type of lunch they receive. Students with standard lunch outperform their peers with free/reduced lunch in math, reading, and writing. This suggests that the type of lunch can be a proxy for socioeconomic status and may have an impact on a student's academic outcomes.
