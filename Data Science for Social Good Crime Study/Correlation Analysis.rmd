@@ -1,0 +1,61 @@
+---
+title: "R Notebook"
+output: pdf_document
+geometry: margin=1.5cm
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(corrplot)
+
+# Load the datasets
+calls_data <- read.csv("data/police-department-calls-for-service.csv")
+incidents_data <- read.csv("data/police-department-incidents.csv")
+
+# Check the structure of the dataset
+str(incidents_data)
+```
+```{r}
+# Extracting hour, day of the week, and month from the incident datetime
+incidents_data <- incidents_data %>%
+  mutate(
+    Incident_Datetime = ymd_hms(incident_datetime),  # Convert to datetime
+    Hour = hour(Incident_Datetime),
+    DayOfWeek = wday(Incident_Datetime, label = TRUE),
+    Month = month(Incident_Datetime, label = TRUE)
+  )
+
+# Check the new columns
+head(incidents_data)
+```
+```{r}
+# Create a pivot table of crime counts by hour and day of week
+crime_hourly = incidents_data %>%
+        count(Hour, Category) %>%
+        spread(key = Category, value = n, fill = 0)
+
+crime_daily = incidents_data %>%
+        count(DayOfWeek, Category) %>%
+        spread(key = Category, value = n, fill = 0)
+
+# Compute correlation matrices
+cor_hourly = cor(crime_hourly[-1])  # Remove the first column as it is the Hour
+cor_daily = cor(crime_daily[-1])  # Remove the first column as it is the DayOfWeek
+```
+```{r}
+# Plotting correlation heatmap for hourly data
+corrplot(cor_hourly, method = "color", type = "upper",
+         tl.col = "black", tl.cex = 0.7,
+         title = "Correlation of Crimes by Hour", mar=c(0,0,1,0))
+
+# Plotting correlation heatmap for daily data
+corrplot(cor_daily, method = "color", type = "upper",
+         tl.col = "black", tl.cex = 0.7,
+         title = "Correlation of Crimes by Day of the Week", mar=c(0,0,1,0))
+```

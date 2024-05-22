@@ -1,0 +1,93 @@
+---
+title: "Crime Types"
+output: pdf_document
+geometry: margin=1.5cm
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Crime Types
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(sf)
+
+# Load the datasets
+calls_data <- read.csv("data/police-department-calls-for-service.csv")
+incidents_data <- read.csv("data/police-department-incidents.csv")
+```
+```{r}
+# Load geographical boundaries for neighborhoods and districts
+neighborhoods <- st_read("data/neighborhoods_shapefile.shp")
+districts <- st_read("data/districts_shapefile.shp")
+```
+```{r}
+# Summarize the frequency of different crime types
+crime_summary <- incidents_data %>%
+  group_by(Category) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Summarize crime types by neighborhoods
+crime_by_neighborhood <- incidents_data %>%
+  group_by(Analysis_Neighborhood, Category) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Summarize crime types by districts
+crime_by_district <- incidents_data %>%
+  group_by(PdDistrict, Category) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+```
+
+```{r}
+# Bar plot of overall crime types
+ggplot(crime_summary, aes(x = reorder(Category, -count), y = count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Frequency of Different Crime Types in San Francisco",
+       x = "Crime Type", y = "Count")
+```
+```{r}
+# Bar plot of crime types by neighborhood
+ggplot(crime_by_neighborhood, aes(x = reorder(Analysis_Neighborhood, -count), y = count, fill = Category)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Crime Types by Neighborhood in San Francisco",
+       x = "Neighborhood", y = "Count")
+```
+```{r}
+# Bar plot of crime types by district
+ggplot(crime_by_district, aes(x = reorder(PdDistrict, -count), y = count, fill = Category)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Crime Types by District in San Francisco",
+       x = "Police District", y = "Count")
+```
+```{r}
+# Join crime data with geographical boundaries
+crime_neighborhood_map <- neighborhoods %>%
+  left_join(crime_by_neighborhood, by = c("neighborhood_name" = "Analysis_Neighborhood"))
+
+crime_district_map <- districts %>%
+  left_join(crime_by_district, by = c("district_name" = "PdDistrict"))
+
+# Plot crime by neighborhood on a map
+ggplot(data = crime_neighborhood_map) +
+  geom_sf(aes(fill = count)) +
+  scale_fill_viridis_c() +
+  labs(title = "Crime Incidents by Neighborhood in San Francisco",
+       fill = "Crime Count")
+
+# Plot crime by district on a map
+ggplot(data = crime_district_map) +
+  geom_sf(aes(fill = count)) +
+  scale_fill_viridis_c() +
+  labs(title = "Crime Incidents by District in San Francisco",
+       fill = "Crime Count")
+```

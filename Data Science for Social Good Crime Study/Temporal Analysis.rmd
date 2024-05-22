@@ -1,0 +1,126 @@
+---
+title: "Temporal Analysis"
+output: html_notebook
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+---
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+
+# Load the datasets
+calls <- read.csv("data/police-department-calls-for-service.csv")
+incidents <- read.csv("data/police-department-incidents.csv")
+```
+```{r}
+# Convert date columns to Date format
+calls$Call.Date <- as.Date(calls$Call.Date, format="%Y-%m-%d")
+incidents$Date <- as.Date(incidents$Date, format="%Y-%m-%d")
+```
+```{r}
+# Aggregate daily counts for calls
+daily_calls <- calls %>%
+  count(Call.Date) %>%
+  rename(Date = Call.Date, Count = n)
+
+# Aggregate daily counts for incidents
+daily_incidents <- incidents %>%
+  count(Date) %>%
+  rename(Count = n)
+```
+```{r}
+# Aggregate weekly counts for calls
+weekly_calls <- calls %>%
+  mutate(Week = floor_date(Call.Date, "week")) %>%
+  count(Week) %>%
+  rename(Date = Week, Count = n)
+
+# Aggregate weekly counts for incidents
+weekly_incidents <- incidents %>%
+  mutate(Week = floor_date(Date, "week")) %>%
+  count(Week) %>%
+  rename(Date = Week, Count = n)
+```
+```{r}
+# Aggregate monthly counts for calls
+monthly_calls <- calls %>%
+  mutate(Month = floor_date(Call.Date, "month")) %>%
+  count(Month) %>%
+  rename(Date = Month, Count = n)
+
+# Aggregate monthly counts for incidents
+monthly_incidents <- incidents %>%
+  mutate(Month = floor_date(Date, "month")) %>%
+  count(Month) %>%
+  rename(Date = Month, Count = n)
+```
+```{r}
+# Aggregate yearly counts for calls
+yearly_calls <- calls %>%
+  mutate(Year = floor_date(Call.Date, "year")) %>%
+  count(Year) %>%
+  rename(Date = Year, Count = n)
+
+# Aggregate yearly counts for incidents
+yearly_incidents <- incidents %>%
+  mutate(Year = floor_date(Date, "year")) %>%
+  count(Year) %>%
+  rename(Date = Year, Count = n)
+```
+```{r}
+# Plot daily trends for calls
+ggplot(daily_calls, aes(x = Date, y = Count)) +
+  geom_line(color = "blue") +
+  labs(title = "Daily Crime Trends (Calls for Service)",
+       x = "Date", y = "Count")
+
+# Plot daily trends for incidents
+ggplot(daily_incidents, aes(x = Date, y = Count)) +
+  geom_line(color = "red") +
+  labs(title = "Daily Crime Trends (Incidents)",
+       x = "Date", y = "Count")
+```
+```{r}
+# Plot weekly trends for calls
+ggplot(weekly_calls, aes(x = Date, y = Count)) +
+  geom_line(color = "blue") +
+  labs(title = "Weekly Crime Trends (Calls for Service)",
+       x = "Date", y = "Count")
+
+# Plot weekly trends for incidents
+ggplot(weekly_incidents, aes(x = Date, y = Count)) +
+  geom_line(color = "red") +
+  labs(title = "Weekly Crime Trends (Incidents)",
+       x = "Date", y = "Count")
+```
+```{r}
+# Plot monthly trends for calls
+ggplot(monthly_calls, aes(x = Date, y = Count)) +
+  geom_line(color = "blue") +
+  labs(title = "Monthly Crime Trends (Calls for Service)",
+       x = "Date", y = "Count")
+
+# Plot monthly trends for incidents
+ggplot(monthly_incidents, aes(x = Date, y = Count)) +
+  geom_line(color = "red") +
+  labs(title = "Monthly Crime Trends (Incidents)",
+       x = "Date", y = "Count")
+```
+```{r}
+# Plot yearly trends for calls
+ggplot(yearly_calls, aes(x = Date, y = Count)) +
+  geom_line(color = "blue") +
+  labs(title = "Yearly Crime Trends (Calls for Service)",
+       x = "Date", y = "Count")
+
+# Plot yearly trends for incidents
+ggplot(yearly_incidents, aes(x = Date, y = Count)) +
+  geom_line(color = "red") +
+  labs(title = "Yearly Crime Trends (Incidents)",
+       x = "Date", y = "Count")
+```

@@ -1,0 +1,85 @@
+---
+title: "Descriptive Statistics"
+output: pdf_document
+documentclass: scrartcl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+---
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+
+# Load the datasets
+calls <- read.csv("data/police-department-calls-for-service.csv")
+incidents <- read.csv("data/police-department-incidents.csv")
+```
+## Calculate the count and frequency of each crime category
+```{r}
+# Calculate counts and frequencies for calls
+calls_summary <- calls %>%
+  count(Original.Crime.Type.Name) %>%
+  arrange(desc(n)) %>%
+  mutate(frequency = n / sum(n) * 100)
+
+# Calculate counts and frequencies for incidents
+incidents_summary <- incidents %>%
+  count(Category) %>%
+  arrange(desc(n)) %>%
+  mutate(frequency = n / sum(n) * 100)
+
+```
+## Summarize the data to show distributions and other relevant statistics for each dataset
+```{r}
+# Print summary tables
+print("Summary of Calls for Service:")
+print(calls_summary)
+
+print("Summary of Police Incidents:")
+print(incidents_summary)
+
+# Visualize the top 15 crime categories in calls
+ggplot(data = head(calls_summary, 15), aes(x = reorder(Original.Crime.Type.Name, n), y = n)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  xlab("Crime Type") +
+  ylab("Count") +
+  ggtitle("Top 15 Calls for Service by Crime Type")
+
+# Visualize the top 15 crime categories in incidents
+ggplot(data = head(incidents_summary, 15), aes(x = reorder(Category, n), y = n)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  xlab("Crime Type") +
+  ylab("Count") +
+  ggtitle("Top 15 Police Incidents by Crime Type")
+```
+### Calculate additional descriptive statistics like mean, median, and standard deviation for the counts of crime categories
+```{r}
+# Calculate additional descriptive statistics for calls
+calls_stats <- calls_summary %>%
+  summarize(
+    mean_count = mean(n),
+    median_count = median(n),
+    sd_count = sd(n)
+  )
+
+# Calculate additional descriptive statistics for incidents
+incidents_stats <- incidents_summary %>%
+  summarize(
+    mean_count = mean(n),
+    median_count = median(n),
+    sd_count = sd(n)
+  )
+
+# Print the additional descriptive statistics
+print("Descriptive Statistics for Calls:")
+print(calls_stats)
+
+print("Descriptive Statistics for Incidents:")
+print(incidents_stats)
+```
