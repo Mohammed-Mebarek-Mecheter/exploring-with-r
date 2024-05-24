@@ -1,0 +1,72 @@
+---
+title: "Geospatial Mapping"
+output: pdf_document
+documentclass: article
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+---
+
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(ggmap)
+
+incidents_data <- read.csv("data/police-department-incidents.csv")
+
+# Check the structure of the dataset
+str(incidents_data)
+```
+position the caret at any line or the code chunk, then click "+".
+```{r}
+# Load a static map of San Francisco
+sf_map <- readRDS("data/sf_map.RDS")  # Load the preprocessed map
+```
+Plotting All Crime Incidents
+```{r}
+# Filter data for plotting
+crime_data <- incidents_data %>%
+  filter(!is.na(X) & !is.na(Y))  # Ensure there are no missing values in geospatial data
+
+# Plot crime incidents on the map
+ggmap(sf_map) +
+  geom_point(data = crime_data, aes(x = X, y = Y, color = Category), alpha = 0.5, size = 1) +
+  theme_minimal() +
+  labs(title = "Crime Incidents in San Francisco",
+       x = "Longitude",
+       y = "Latitude") +
+  theme(legend.position = "bottom")
+```
+Plotting Specific Crime Type (e.g., Theft)
+```{r}
+# Filter data for specific crime type (e.g., Theft)
+theft_data <- crime_data %>%
+  filter(Category == "Larceny/Theft")
+
+# Plot theft incidents on the map
+ggmap(sf_map) +
+  geom_point(data = theft_data, aes(x = X, y = Y), alpha = 0.5, color = "red", size = 1) +
+  theme_minimal() +
+  labs(title = "Theft Incidents in San Francisco",
+       x = "Longitude",
+       y = "Latitude") +
+  theme(legend.position = "none")
+```
+Density Plot for Crime Incidents
+```{r}
+# Density plot for all crime incidents
+ggmap(sf_map) +
+  stat_density2d(data = crime_data, aes(x = X, y = Y, fill = ..level..), geom = "polygon", alpha = 0.3) +
+  scale_fill_gradient(low = "yellow", high = "red") +
+  theme_minimal() +
+  labs(title = "Crime Incident Density in San Francisco",
+       x = "Longitude",
+       y = "Latitude") +
+  theme(legend.position = "bottom")
+```
+
