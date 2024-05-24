@@ -35,13 +35,6 @@ incidents_summary <- incidents %>%
 ```
 ## Summarize the data to show distributions and other relevant statistics for each dataset
 ```{r}
-# Print summary tables
-print("Summary of Calls for Service:")
-print(calls_summary)
-
-print("Summary of Police Incidents:")
-print(incidents_summary)
-
 # Visualize the top 15 crime categories in calls
 ggplot(data = head(calls_summary, 15), aes(x = reorder(Original.Crime.Type.Name, n), y = n)) +
   geom_bar(stat = "identity") +

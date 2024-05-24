@@ -1,50 +1,34 @@
-# Load necessary libraries
-library(ggplot2)
-library(ggmap)
+# Load the necessary library
 library(dplyr)
 
-# Load the datasets
-calls <- read.csv("data/police-department-calls-for-service.csv")
-incidents <- read.csv("data/police-department-incidents.csv")
+# Read the CSV file into a data frame
+incidents_data <- read.csv("data/police-department-incidents.csv")
 
-# Filter data for relevant crime categories (optional)
-# Filter for a specific category, e.g., "GRAND THEFT FROM LOCKED AUTO"
-auto_calls <- calls_data %>% filter(Descript == "GRAND THEFT FROM LOCKED AUTO")
-auto_incidents <- incidents_data %>% filter(Descript == "GRAND THEFT FROM LOCKED AUTO")
+# Drop the specified columns
+incidents_data <- incidents_data %>%
+  select(
+    -SF.Find.Neighborhoods.2.2,
+    -Current.Police.Districts.2.2,
+    -Current.Supervisor.Districts.2.2,
+    -Analysis.Neighborhoods.2.2,
+    -DELETE...Fire.Prevention.Districts.2.2,
+    -DELETE...Police.Districts.2.2,
+    -DELETE...Supervisor.Districts.2.2,
+    -DELETE...Zip.Codes.2.2,
+    -DELETE...Neighborhoods.2.2,
+    -DELETE...2017.Fix.It.Zones.2.2,
+    -Civic.Center.Harm.Reduction.Project.Boundary.2.2,
+    -Fix.It.Zones.as.of.2017.11.06..2.2,
+    -DELETE...HSOC.Zones.2.2,
+    -Fix.It.Zones.as.of.2018.02.07.2.2,
+    -CBD..BID.and.GBD.Boundaries.as.of.2017.2.2,
+    -Areas.of.Vulnerability..2016.2.2,
+    -Central.Market.Tenderloin.Boundary.2.2,
+    -Central.Market.Tenderloin.Boundary.Polygon...Updated.2.2,
+    -HSOC.Zones.as.of.2018.06.05.2.2,
+    -OWED.Public.Spaces.2.2,
+    -Neighborhoods.2
+  )
 
-# Read in the preprocessed map of San Francisco (assuming it's saved locally as sf_map.RDS)
-sf_map <- readRDS("datasets/sf_map.RDS")
-
-# Plot a heatmap for calls data
-ggmap(sf_map) +
-  stat_density_2d(
-    aes(x = X, y = Y, fill = ..level..), alpha = 0.5,
-    size = 0.01, bins = 30, data = auto_calls,
-    geom = "polygon"
-  ) +
-  scale_fill_gradient(low = "yellow", high = "red") +
-  labs(title = "Heatmap of Grand Theft Auto Calls in San Francisco",
-       x = "Longitude", y = "Latitude")
-
-# Plot a heatmap for incidents data
-ggmap(sf_map) +
-  stat_density_2d(
-    aes(x = X, y = Y, fill = ..level..), alpha = 0.5,
-    size = 0.01, bins = 30, data = auto_incidents,
-    geom = "polygon"
-  ) +
-  scale_fill_gradient(low = "yellow", high = "red") +
-  labs(title = "Heatmap of Grand Theft Auto Incidents in San Francisco",
-       x = "Longitude", y = "Latitude")
-
-# Plot density plots for comparison (calls)
-ggmap(sf_map) +
-  geom_point(data = auto_calls, aes(x = X, y = Y), alpha = 0.3, color = "blue") +
-  labs(title = "Density Plot of Grand Theft Auto Calls in San Francisco",
-       x = "Longitude", y = "Latitude")
-
-# Plot density plots for comparison (incidents)
-ggmap(sf_map) +
-  geom_point(data = auto_incidents, aes(x = X, y = Y), alpha = 0.3, color = "red") +
-  labs(title = "Density Plot of Grand Theft Auto Incidents in San Francisco",
-       x = "Longitude", y = "Latitude")
+# Save the cleaned data frame as a CSV file, overwriting the original file
+write.csv(incidents_data, "data/police-department-incidents.csv", row.names = FALSE)

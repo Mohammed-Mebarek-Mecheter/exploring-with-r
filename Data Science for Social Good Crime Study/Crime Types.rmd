@@ -70,24 +70,11 @@ ggplot(crime_by_district, aes(x = reorder(PdDistrict, -count), y = count, fill =
        x = "Police District", y = "Count")
 ```
 ```{r}
-# Join crime data with geographical boundaries
-crime_neighborhood_map <- neighborhoods %>%
-  left_join(crime_by_neighborhood, by = c("neighborhood_name" = "Analysis_Neighborhood"))
-
-crime_district_map <- districts %>%
-  left_join(crime_by_district, by = c("district_name" = "PdDistrict"))
-
-# Plot crime by neighborhood on a map
-ggplot(data = crime_neighborhood_map) +
-  geom_sf(aes(fill = count)) +
-  scale_fill_viridis_c() +
-  labs(title = "Crime Incidents by Neighborhood in San Francisco",
-       fill = "Crime Count")
-
-# Plot crime by district on a map
-ggplot(data = crime_district_map) +
-  geom_sf(aes(fill = count)) +
-  scale_fill_viridis_c() +
-  labs(title = "Crime Incidents by District in San Francisco",
-       fill = "Crime Count")
+# Map of crime types
+ggplot() +
+  geom_sf(data = Neighborhoods.2, fill = "white") +
+  geom_sf(data = crime_by_neighborhood, aes(fill = Category)) +
+  theme_void() +
+  labs(title = "Crime Types in San Francisco",
+       fill = "Crime Type")
 ```
