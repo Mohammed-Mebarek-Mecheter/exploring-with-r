@@ -1,4 +1,4 @@
-/* style.css */
+/* custom.css */
 
 body {
   font-family: 'Arial', sans-serif;
@@ -11,8 +11,6 @@ body {
 
 .nav-tabs {
   background-color: #337ab7;
-  border: 1px solid #ddd;
-  padding: 20px;
 }
 
 .nav-tabs > li > a {
@@ -31,13 +29,42 @@ body {
   border-top: none;
 }
 
+.well {
+  background-color: #f9f9f9;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+}
+
 .plot-container {
   border: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 20px;
+  background-color: white;
 }
 
 .dataTables_wrapper {
   padding: 10px;
   background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+/* Adjust sidebar width */
+@media (min-width: 768px) {
+  .col-sm-3 {
+    width: 20%;
+  }
+  .col-sm-9 {
+    width: 80%;
+  }
+}
+
+/* Add some spacing between elements */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.shiny-plot-output {
+  margin-bottom: 20px;
 }
